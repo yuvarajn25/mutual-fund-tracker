@@ -1,0 +1,21 @@
+**Task: Backend - User Authentication**
+
+**Description:**
+
+Implement user authentication for the Mutual Fund Tracker application. This will allow users to create secure accounts and access their investment data. Supabase handles the user authentication. This task is about setting up the backend to work with the Supabase authentication.
+
+**Requirements:**
+
+*   Integrate with Supabase for user authentication.
+*   Implement API endpoints for user registration and login.
+*   Secure user accounts with password protection (handled by Supabase).
+*   Handle user sessions and authorization.
+*   Use Supabase for the backend implementation.
+*   Use PostgreSQL for the database.
+
+**Acceptance Criteria:**
+
+*   Users should be able to register with a valid email address and password.
+*   Users should be able to log in with their registered email address and password.
+*   User sessions should be managed securely.
+*   API endpoints should be protected and only accessible to authenticated users.

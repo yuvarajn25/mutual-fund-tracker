@@ -1,0 +1,27 @@
+**Task: Frontend - Add Transaction Form Development**
+
+**Description:**
+
+Implement the "Add Transaction" form for the Mutual Fund Tracker application. This form should allow users to manually enter details of their mutual fund transactions.
+
+**Requirements:**
+
+*   Provide input fields for the following transaction details:
+    *   Fund Name
+    *   Transaction Date
+    *   Transaction Type (purchase, sale, dividend)
+    *   Units
+    *   Price
+*   Implement validation to ensure that all required fields are filled and that the data is in the correct format.
+*   Provide clear error messages for invalid data.
+*   Use Angular for the frontend implementation.
+*   Ensure responsive design for various screen sizes.
+
+**Acceptance Criteria:**
+
+*   The form should be easy to use and understand.
+*   All input fields should be clearly labeled and provide appropriate input types.
+*   Validation should prevent users from submitting invalid data.
+*   Error messages should be informative and help users correct their mistakes.
+*   The form should submit the transaction data to the backend successfully.
+*   The layout should be responsive and adapt to different screen sizes.

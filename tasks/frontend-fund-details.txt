@@ -1,0 +1,23 @@
+**Task: Frontend - Fund Details View Development**
+
+**Description:**
+
+Implement the fund details view for the Mutual Fund Tracker application. This view should display detailed information about a selected mutual fund, including its current NAV, historical NAV data, and performance metrics.
+
+**Requirements:**
+
+*   Display the fund's name, code, and other relevant details.
+*   Show the current NAV (Net Asset Value) of the fund.
+*   Display historical NAV data in a table or chart format.
+*   Calculate and display performance metrics (e.g., 1-year return, 3-year return).
+*   Integrate with the backend API to fetch the latest NAV data and historical data.
+*   Use Angular for the frontend implementation.
+*   Ensure responsive design for various screen sizes.
+
+**Acceptance Criteria:**
+
+*   The fund details view should load quickly and display accurate fund data.
+*   The current NAV should be up-to-date.
+*   Historical NAV data should be displayed clearly and accurately.
+*   Performance metrics should be calculated correctly.
+*   The layout should be responsive and adapt to different screen sizes.

@@ -1,0 +1,25 @@
+**Task: Frontend - CSV Upload Interface Development**
+
+**Description:**
+
+Implement the CSV upload interface for the Mutual Fund Tracker application. This interface should allow users to upload transaction data from CSV files.
+
+**Requirements:**
+
+*   Provide a file upload field for users to select a CSV file.
+*   Implement client-side validation to ensure that the selected file is a CSV file.
+*   Display a preview of the CSV data before uploading.
+*   Allow users to map the CSV columns to the corresponding transaction fields (fund name, date, type, units, price).
+*   Implement error handling for invalid CSV data.
+*   Use Angular for the frontend implementation.
+*   Ensure responsive design for various screen sizes.
+
+**Acceptance Criteria:**
+
+*   The file upload field should be easy to use and clearly labeled.
+*   Client-side validation should prevent users from uploading non-CSV files.
+*   The CSV data preview should be accurate and display the data in a readable format.
+*   Users should be able to easily map the CSV columns to the transaction fields.
+*   Error handling should provide informative messages for invalid CSV data.
+*   The uploaded CSV data should be sent to the backend for processing.
+*   The layout should be responsive and adapt to different screen sizes.

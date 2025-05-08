@@ -1,0 +1,29 @@
+```text
+# Commands used to create the project and add tasks
+
+# Create GitHub repository
+# create_repository(autoInit=True, description="A mutual fund tracker application.", name="mutual-fund-tracker")
+
+# Create tasks directory
+# create_directory(path="mf_tracker/tasks")
+
+# Create task files
+# edit_file(create_or_overwrite=True, display_description="Create task file for frontend dashboard development", path="mf_tracker/tasks/frontend-dashboard.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for frontend transaction list development", path="mf_tracker/tasks/frontend-transaction-list.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for frontend add transaction form", path="mf_tracker/tasks/frontend-add-transaction.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for frontend fund details view", path="mf_tracker/tasks/frontend-fund-details.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for frontend CSV upload interface", path="mf_tracker/tasks/frontend-csv-upload.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for frontend user authentication", path="mf_tracker/tasks/frontend-user-authentication.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for backend transaction management API", path="mf_tracker/tasks/backend-transaction-api.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for backend NAV data fetching service", path="mf_tracker/tasks/backend-nav-data-service.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for backend mutual fund search service", path="mf_tracker/tasks/backend-fund-search-service.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for backend CSV parsing and validation", path="mf_tracker/tasks/backend-csv-processing.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for backend user authentication", path="mf_tracker/tasks/backend-user-authentication.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for database setup", path="mf_tracker/tasks/database-setup.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for testing", path="mf_tracker/tasks/testing.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for deployment", path="mf_tracker/tasks/deployment.txt")
+# edit_file(create_or_overwrite=True, display_description="Create task file for supabase initial project setup", path="mf_tracker/tasks/supabase-project-setup.txt")
+
+# Create scripts directory
+# create_directory(path="mf_tracker/scripts")
+```

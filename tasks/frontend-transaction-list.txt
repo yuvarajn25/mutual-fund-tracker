@@ -1,0 +1,20 @@
+**Task: Frontend - Transaction List Development**
+
+**Description:**
+
+Implement the transaction list view for the Mutual Fund Tracker application. This view should allow users to display and manage their mutual fund transactions.
+
+**Requirements:**
+
+*   Display a list of all transactions with relevant details (fund name, date, type, units, price).
+*   Allow users to sort and filter transactions by different criteria (e.g., date, fund, transaction type).
+*   Provide options to edit and delete existing transactions.
+*   Use Angular and PrimeNG for the frontend implementation.
+*   Ensure responsive design for various screen sizes.
+
+**Acceptance Criteria:**
+
+*   The transaction list should load quickly and display accurate transaction data.
+*   Sorting and filtering should work correctly and provide the expected results.
+*   Editing and deleting transactions should update the database accordingly.
+*   The layout should be responsive and adapt to different screen sizes.

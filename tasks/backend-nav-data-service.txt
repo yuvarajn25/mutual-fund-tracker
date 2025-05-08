@@ -1,0 +1,23 @@
+**Task: Backend - NAV Data Fetching Service Development**
+
+**Description:**
+
+Develop a service to fetch NAV (Net Asset Value) data from the external API ([https://api.mfapi.in/mf/148035/latest](https://api.mfapi.in/mf/148035/latest)) and store it in the database.
+
+**Requirements:**
+
+*   Implement a service to periodically call the external API for each tracked fund.
+*   Parse the API response and extract the NAV data.
+*   Store the NAV data in the database, including the fund ID, NAV date, and NAV value.
+*   Implement error handling and retry mechanisms for API requests.
+*   Consider caching NAV data to reduce API calls and improve performance.
+*   Use Supabase for the backend implementation.
+*   Use PostgreSQL for the database.
+
+**Acceptance Criteria:**
+
+*   The service should fetch NAV data automatically and store it in the database.
+*   The fetched NAV data should be accurate and up-to-date.
+*   Error handling should prevent the service from crashing due to API errors.
+*   Caching should reduce the number of API calls and improve performance.
+*   The service should be scalable and able to handle a large number of tracked funds.

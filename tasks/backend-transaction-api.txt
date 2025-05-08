@@ -1,0 +1,26 @@
+**Task: Backend - Transaction Management API Development**
+
+**Description:**
+
+Implement the backend API endpoints for managing mutual fund transactions. This includes creating, reading, updating, and deleting transactions.
+
+**Requirements:**
+
+*   Implement API endpoints for:
+    *   Adding a new transaction
+    *   Retrieving a transaction by ID
+    *   Updating an existing transaction
+    *   Deleting a transaction
+    *   Listing all transactions for a user
+*   Use Supabase for the backend implementation.
+*   Use PostgreSQL for the database.
+*   Implement proper data validation and error handling.
+*   Secure the API endpoints with authentication.
+
+**Acceptance Criteria:**
+
+*   The API endpoints should be functional and perform the required operations correctly.
+*   Data validation should prevent invalid data from being stored in the database.
+*   Error handling should provide informative error messages.
+*   The API endpoints should be secured and only accessible to authenticated users.
+*   The API should be well-documented.

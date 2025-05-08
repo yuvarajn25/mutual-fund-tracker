@@ -1,0 +1,22 @@
+**Task: Backend - Mutual Fund Search Service Development**
+
+**Description:**
+
+Develop a service to search for mutual funds using the external API ([https://api.mfapi.in/mf/search?q=IDF](https://api.mfapi.in/mf/search?q=IDF)). This service will allow users to find and add new mutual funds to their portfolio.
+
+**Requirements:**
+
+*   Implement a service to call the external API with a search query.
+*   Parse the API response and extract the fund details (fund name, fund code, etc.).
+*   Allow users to select a fund from the search results and add it to their portfolio.
+*   Store the fund details in the database.
+*   Implement error handling for API requests.
+*   Use Supabase for the backend implementation.
+*   Use PostgreSQL for the database.
+
+**Acceptance Criteria:**
+
+*   The service should return accurate search results based on the user's query.
+*   Users should be able to easily add new funds to their portfolio from the search results.
+*   Fund details should be stored correctly in the database.
+*   Error handling should prevent the service from crashing due to API errors.

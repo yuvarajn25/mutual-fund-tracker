@@ -1,0 +1,143 @@
+## Product Requirements Document: Mutual Fund Tracker
+
+**1. Introduction**
+
+*   **1.1 Purpose:** This document outlines the requirements for a Mutual Fund Tracker application that allows users to track their mutual fund investments, transaction details, and NAV (Net Asset Value) information.
+*   **1.2 Goals:**
+    *   Provide a user-friendly interface for managing mutual fund investments.
+    *   Automatically fetch and display the latest NAV data for tracked funds.
+    *   Enable users to record and track their mutual fund transactions.
+    *   Offer a comprehensive dashboard summarizing investment performance.
+
+**2. Goals**
+
+*   A user should be able to view a dashboard with a summary of their investments.
+*   A user should be able to add, edit, and delete mutual fund transactions.
+*   A user should be able to upload transactions via CSV.
+*   A user should be able to view detailed information about each mutual fund.
+*   The application should automatically fetch and display the latest NAV data for tracked funds using the provided API.
+
+**3. Target Audience**
+
+*   Individual investors who want to track their mutual fund investments.
+*   Financial advisors who manage mutual fund portfolios for their clients.
+
+**4. Features**
+
+*   **4.1 Dashboard:**
+    *   Display a summary of total investment value.
+    *   Showcase overall gains/losses.
+    *   Provide a breakdown of investments by fund.
+    *   Visualize investment performance over time with charts.
+*   **4.2 Transaction Management:**
+    *   Allow users to manually enter transaction details (fund name, date, units, price, transaction type - purchase/sale/dividend).
+    *   Enable users to upload transaction data from CSV files.
+    *   Support editing and deletion of existing transactions.
+*   **4.3 Mutual Fund Details:**
+    *   Display detailed information for each tracked fund.
+    *   Show current NAV, historical NAV data, and performance metrics.
+    *   Integrate with the [https://api.mfapi.in/mf/148035/latest](https://api.mfapi.in/mf/148035/latest) API to fetch the latest NAV data.
+    *   Integrate with the [https://api.mfapi.in/mf/search?q=IDF](https://api.mfapi.in/mf/search?q=IDF) API to search for new mutual funds.
+*   **4.4 User Authentication:**
+    *   Secure user accounts with password protection.
+    *   Implement user registration and login functionality.
+*   **4.5 Reporting:**
+    *   Generate reports on investment performance, transaction history, and capital gains.
+    *   Export reports in various formats (e.g., PDF, CSV).
+
+**5. Technical Requirements**
+
+*   **5.1 Frontend:**
+    *   Technology: Angular, PrimeNG
+    *   Responsive design to support various screen sizes.
+*   **5.2 Backend:**
+    *   Technology: Supabase
+    *   Database: PostgreSQL (Supabase default)
+    *   API Integration:
+        *   Implement a service to fetch NAV data from the [https://api.mfapi.in/mf/148035/latest](https://api.mfapi.in/mf/148035/latest) API and store it in the database.
+        *   Implement a service to search mutual funds from the [https://api.mfapi.in/mf/search?q=IDF](https://api.mfapi.in/mf/search?q=IDF) API and add them to the portfolio.
+*   **5.3 CSV Upload:**
+    *   Implement a CSV parser to handle transaction data uploads.
+    *   Support standard CSV formats with clear error handling for invalid data.
+*   **5.4 API Considerations:**
+    *   The application will use the [https://api.mfapi.in/mf/148035/latest](https://api.mfapi.in/mf/148035/latest) API to fetch the latest NAV data.
+    *   Implement error handling and retry mechanisms for API requests.
+    *   Consider caching NAV data to reduce API calls and improve performance.
+
+**6. Data Model**
+
+*   **6.1 Users:** (Managed by Supabase Authentication)
+    *   `user_id` (provided by Supabase)
+    *   `email` (provided by Supabase)
+*   **6.2 Mutual Funds:**
+    *   `fund_id` (primary key)
+    *   `fund_name`
+    *   `fund_code` (e.g., the "148035" part of the API endpoint)
+    *   `...other relevant fund details`
+*   **6.3 Transactions:**
+    *   `transaction_id` (primary key)
+    *   `user_id` (foreign key referencing Users)
+    *   `fund_id` (foreign key referencing Mutual Funds)
+    *   `transaction_date`
+    *   `transaction_type` (purchase, sale, dividend)
+    *   `units`
+    *   `price`
+*   **6.4 NAV Data:**
+    *   `nav_id` (primary key)
+    *   `fund_id` (foreign key referencing Mutual Funds)
+    *   `nav_date`
+    *   `nav_value`
+
+**7. User Interface (UI) Design**
+
+*   **7.1 Style Guide:**
+    *   Modern and clean design.
+    *   Intuitive navigation.
+    *   Use of charts and graphs to visualize data.
+*   **7.2 Key Screens:**
+    *   Dashboard: Overview of investments.
+    *   Transaction List: Display and manage transactions.
+    *   Add Transaction: Form to manually add transactions.
+    *   Fund Details: Detailed information about a selected mutual fund.
+    *   CSV Upload: Interface for uploading transactions from a CSV file.
+
+**8. Workflow**
+
+1.  **User logs in:** User authentication is verified.
+2.  **Dashboard is displayed:** Summary of investments is shown.
+3.  **User adds a transaction:**
+    *   User navigates to the "Add Transaction" page.
+    *   User enters transaction details (fund, date, type, units, price).
+    *   Transaction is saved to the database.
+4.  **User uploads a CSV:**
+    *   User navigates to the "CSV Upload" page.
+    *   User selects a CSV file.
+    *   Application parses the CSV data and validates it.
+    *   Valid transactions are saved to the database.
+5.  **NAV data is fetched:**
+    *   A background process periodically calls the [https://api.mfapi.in/mf/148035/latest](https://api.mfapi.in/mf/148035/latest) API for each tracked fund.
+    *   The fetched NAV data is stored in the database.
+6.  **User views fund details:**
+    *   User selects a fund from the dashboard or transaction list.
+    *   Fund details, including the latest NAV and historical data, are displayed.
+
+**9. Testing**
+
+*   **9.1 Unit Tests:**
+    *   Verify the functionality of individual components (e.g., CSV parser, API integration).
+*   **9.2 Integration Tests:**
+    *   Test the interaction between different components (e.g., transaction management, NAV data fetching).
+*   **9.3 User Acceptance Testing (UAT):**
+    *   End-users test the application to ensure it meets their requirements.
+
+**10. Deployment**
+
+*   **10.1 Frontend:** Deploy the Angular application to a hosting platform (e.g., Netlify, Vercel).
+*   **10.2 Backend:** Supabase handles the backend deployment and database management.
+
+**11. Future Enhancements**
+
+*   Integration with other financial APIs.
+*   Advanced reporting and analytics.
+*   Portfolio tracking and recommendations.
+*   Mobile app development.

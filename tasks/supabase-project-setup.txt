@@ -1,0 +1,31 @@
+```text
+**Task: Supabase Initial Project Setup**
+
++**Description:**
+
+Set up the initial Supabase project for the Mutual Fund Tracker application. This includes creating a new Supabase project, configuring the database, and setting up authentication.
+
+**Requirements:**
+
++*   Establish a monorepo structure to manage both frontend and backend code.
++*   Create a new Supabase project on the Supabase platform.
++*   Configure the PostgreSQL database with the necessary extensions.
++*   Set up user authentication using Supabase Auth.
++*   Define database roles and permissions.
++*   Enable Supabase Storage for file uploads (e.g., CSV files).
++*   Set up environment variables for the Supabase project URL and API key.
++*   Develop setup scripts for automating the deployment process.
+*   Enable Supabase Storage for file uploads (e.g., CSV files).
+*   Set up environment variables for the Supabase project URL and API key.
+
+**Acceptance Criteria:**
+
++*   A monorepo structure should be set up to manage both frontend and backend code.
++*   A new Supabase project should be created and accessible.
++*   The PostgreSQL database should be configured correctly.
++*   User authentication should be set up and functional.
++*   Database roles and permissions should be properly defined.
++*   Supabase Storage should be enabled.
++*   Environment variables should be set up correctly.
++*   Setup scripts should automate the deployment process.
+```

@@ -1,0 +1,41 @@
+**Task: Database Setup**
+
+**Description:**
+
+Set up the PostgreSQL database using Supabase for the Mutual Fund Tracker application. This includes creating tables for users, mutual funds, transactions, and NAV data, and defining the relationships between them.
+
+**Requirements:**
+
+*   Create tables for:
+    *   `Users`: (Managed by Supabase Authentication)
+        *   `user_id` (provided by Supabase)
+        *   `email` (provided by Supabase)
+    *   `Mutual Funds`:
+        *   `fund_id` (primary key)
+        *   `fund_name`
+        *   `fund_code` (e.g., the "148035" part of the API endpoint)
+        *   `...other relevant fund details`
+    *   `Transactions`:
+        *   `transaction_id` (primary key)
+        *   `user_id` (foreign key referencing Users)
+        *   `fund_id` (foreign key referencing Mutual Funds)
+        *   `transaction_date`
+        *   `transaction_type` (purchase, sale, dividend)
+        *   `units`
+        *   `price`
+    *   `NAV Data`:
+        *   `nav_id` (primary key)
+        *   `fund_id` (foreign key referencing Mutual Funds)
+        *   `nav_date`
+        *   `nav_value`
+*   Define appropriate data types for each column.
+*   Establish foreign key relationships between tables.
+*   Ensure data integrity and consistency.
+*   Use Supabase for database management.
+
+**Acceptance Criteria:**
+
+*   All required tables should be created with the correct schema.
+*   Foreign key relationships should be properly defined.
+*   Data integrity should be enforced.
+*   The database should be accessible and functional.

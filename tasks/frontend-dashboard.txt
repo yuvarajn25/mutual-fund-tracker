@@ -1,0 +1,28 @@
+**Task: Frontend - Dashboard Development**
+
+**Description:**
+
+Implement the dashboard view for the Mutual Fund Tracker application. The dashboard should provide a summary of the user's investments, including:
+
+*   Total investment value
+*   Overall gains/losses
+*   Breakdown of investments by fund
+*   Visualization of investment performance over time with charts
+
+**Requirements:**
+
+*   Display a summary of total investment value.
+*   Showcase overall gains/losses.
+*   Provide a breakdown of investments by fund.
+*   Visualize investment performance over time with charts
+*   Use PrimeNG components for UI elements.
+*   Use Angular for the frontend implementation.
+*   Use PrimeNG components for UI elements.
+*   Ensure responsive design for various screen sizes.
+
+**Acceptance Criteria:**
+
+*   The dashboard should load quickly and display accurate investment data.
+*   The charts should be clear, interactive, and visually appealing.
+*   The layout should be responsive and adapt to different screen sizes.
+
