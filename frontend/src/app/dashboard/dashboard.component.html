@@ -1,0 +1,26 @@
+<div class="container p-4">
+    <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+
+    <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+            <thead>
+                <tr>
+                    <th>Fund Name</th>
+                    <th>Fund Code</th>
+                    <th>Net Units</th>
+                    <th>NAV</th>
+                    <th>Unit * NAV</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let summary of fundSummaries">
+                    <td>{{ summary.fund_name }}</td>
+                    <td>{{ summary.fund_code }}</td>
+                    <td>{{ summary.net_units }}</td>
+                    <td>{{ summary.nav }}</td>
+                    <td>{{ summary.unitNavValue }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

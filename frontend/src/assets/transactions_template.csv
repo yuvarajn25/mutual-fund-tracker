@@ -1,0 +1,5 @@
+fund_code,transaction_date,transaction_type,units,price,platform
+149441,2024-01-15,BUY,10,100,PlatformA
+149910,2024-02-20,SELL,5,110,PlatformB
+149039,2024-03-10,BUY,20,95,PlatformC
+149040,2024-03-10,BUY,20,95,PlatformC

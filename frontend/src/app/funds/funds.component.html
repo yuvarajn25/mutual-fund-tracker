@@ -1,0 +1,62 @@
+<div class="container p-4">
+  <h1 class="text-2xl font-bold mb-4">Create New Fund</h1>
+
+  <div class="search-section mb-4">
+    <label for="searchQuery" class="block text-gray-700 text-sm font-bold mb-2"
+      >Search Fund:</label
+    >
+    <input
+      (focus)="isDropdownOpen = true"
+      type="text"
+      id="searchQuery"
+      [(ngModel)]="searchQuery"
+      (keyup)="onSearchQueryChange(searchQuery)"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      placeholder="Enter fund name"
+    />
+
+    <ul
+      *ngIf="searchResults.length > 0 && isDropdownOpen"
+      class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg"
+    >
+      <li
+        *ngFor="let fund of searchResults"
+        (click)="selectFund(fund.schemeCode); isDropdownOpen = false"
+        class="py-2 px-4 cursor-pointer hover:bg-gray-100"
+      >
+        {{ fund.schemeName }}
+      </li>
+    </ul>
+  </div>
+
+  <div class="details-section" *ngIf="fundDetails" class="border rounded p-4">
+    <h2 class="text-xl font-semibold mb-2">Fund Details</h2>
+    <p class="mb-1">Scheme Name: {{ fundDetails.schemeName }}</p>
+    <p class="mb-1">NAV: {{ fundDetails.nav }}</p>
+    <p class="mb-1">Date: {{ fundDetails.date }}</p>
+
+    <button
+      (click)="saveFund()"
+      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+    >
+      Save Fund
+    </button>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr>
+          <th>Fund Name</th>
+          <th>Fund Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fund of funds">
+          <td>{{ fund.fund_name }}</td>
+          <td>{{ fund.fund_code }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
