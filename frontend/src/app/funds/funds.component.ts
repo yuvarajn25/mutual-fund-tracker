@@ -1,52 +1,40 @@
 import { Component, OnInit } from "@angular/core";
-import { environment } from "../../environments/environment";
-import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { firstValueFrom } from "rxjs";
-import { Subject } from "rxjs";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { AuthService } from "../auth/auth.service";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { SearchResult, FundDetails, MutualFund } from "../shared/types";
-
+import { AutoCompleteModule } from "primeng/autocomplete";
+import { TableModule } from "primeng/table";
 
 @Component({
   selector: "app-funds",
   templateUrl: "./funds.component.html",
   styleUrls: ["./funds.component.css"],
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [CommonModule, AutoCompleteModule, TableModule],
 })
 export class FundsComponent implements OnInit {
-  searchQuery = "";
   searchResults: SearchResult[] = [];
   selectedFund: string | null = null;
   fundDetails: FundDetails | null = null;
   funds: MutualFund[] = [];
 
-  isDropdownOpen = false;
   private supabase: SupabaseClient;
-  private searchTerms = new Subject<string>();
 
   constructor(private authService: AuthService) {
     this.supabase = authService.getClient();
   }
 
   async ngOnInit(): Promise<void> {
-    this.searchTerms
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((term) => {
-        if (term.length >= 4) {
-          this.searchFunds();
-        } else {
-          this.searchResults = [];
-        }
-      });
     await this.getFunds();
   }
 
-  searchFunds(): void {
-    const url = `https://api.mfapi.in/mf/search?q=${this.searchQuery}`;
+  searchFunds(event: any): void {
+    if (event.query.length < 4) {
+      this.searchResults = [];
+      return;
+    }
+    const url = `https://api.mfapi.in/mf/search?q=${event.query}`;
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -55,8 +43,9 @@ export class FundsComponent implements OnInit {
       .catch((error) => console.error("Error searching funds:", error));
   }
 
-  onSearchQueryChange(term: string): void {
-    this.searchTerms.next(term);
+  onSelectedFund(event: any) {
+    console.log("onSelectedFund", event);
+    this.selectFund(event.value.schemeCode);
   }
 
   selectFund(schemeCode: string): void {

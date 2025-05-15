@@ -5,28 +5,14 @@
     <label for="searchQuery" class="block text-gray-700 text-sm font-bold mb-2"
       >Search Fund:</label
     >
-    <input
-      (focus)="isDropdownOpen = true"
-      type="text"
-      id="searchQuery"
-      [(ngModel)]="searchQuery"
-      (keyup)="onSearchQueryChange(searchQuery)"
-      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      placeholder="Enter fund name"
+    <p-autocomplete
+      styleClass="w-full"
+      inputStyleClass="w-full"
+      [suggestions]="searchResults"
+      (completeMethod)="searchFunds($event)"
+      (onSelect)="onSelectedFund($event)"
+      optionLabel="schemeName"
     />
-
-    <ul
-      *ngIf="searchResults.length > 0 && isDropdownOpen"
-      class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg"
-    >
-      <li
-        *ngFor="let fund of searchResults"
-        (click)="selectFund(fund.schemeCode); isDropdownOpen = false"
-        class="py-2 px-4 cursor-pointer hover:bg-gray-100"
-      >
-        {{ fund.schemeName }}
-      </li>
-    </ul>
   </div>
 
   <div class="details-section" *ngIf="fundDetails" class="border rounded p-4">
@@ -44,19 +30,23 @@
   </div>
 
   <div class="overflow-x-auto">
-    <table class="table table-zebra w-full">
-      <thead>
+    <p-table [value]="funds" [tableStyle]="{ 'min-width': '60rem' }">
+      <ng-template #header>
         <tr>
-          <th>Fund Name</th>
-          <th>Fund Code</th>
+          <th pSortableColumn="fund_code">
+            Fund Code <p-sortIcon field="fund_code" />
+          </th>
+          <th pSortableColumn="fund_name">
+            Fund Name <p-sortIcon field="fund_name" />
+          </th>
         </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let fund of funds">
-          <td>{{ fund.fund_name }}</td>
+      </ng-template>
+      <ng-template #body let-fund>
+        <tr>
           <td>{{ fund.fund_code }}</td>
+          <td>{{ fund.fund_name }}</td>
         </tr>
-      </tbody>
-    </table>
+      </ng-template>
+    </p-table>
   </div>
 </div>

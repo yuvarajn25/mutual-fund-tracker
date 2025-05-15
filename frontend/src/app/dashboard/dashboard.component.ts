@@ -11,6 +11,8 @@ interface FundSummary {
   unitNavValue: number;
   net_units: number;
   nav: number | null;
+  invested: number;
+  profit: number;
 }
 
 async function updateNavData(
@@ -96,6 +98,8 @@ async function updateNavData(
 })
 export class DashboardComponent implements OnInit {
   fundSummaries: FundSummary[] = [];
+  totalInvested: number = 0;
+  totalProfit: number = 0;
   private supabase: SupabaseClient;
 
   constructor(private authService: AuthService) {
@@ -121,7 +125,7 @@ export class DashboardComponent implements OnInit {
         console.error("Error fetching fund summaries:", error);
         return;
       }
-      // Filter out funds with net_units equal to 0
+
       this.fundSummaries = (fundSummaries as unknown as FundSummaryWithNav[])
         .filter((summary) => summary.net_units !== 0)
         .map((summary) => ({
@@ -130,7 +134,18 @@ export class DashboardComponent implements OnInit {
             summary.net_units *
             (summary.nav_data ? summary.nav_data?.[0]?.nav_value : 0),
           nav: summary.nav_data ? summary.nav_data?.[0]?.nav_value : null,
+          invested: summary.invested,
+          profit: summary.profit,
         })) as FundSummary[];
+
+      this.totalInvested = this.fundSummaries.reduce(
+        (sum, summary) => sum + summary.invested,
+        0,
+      );
+      this.totalProfit = this.fundSummaries.reduce(
+        (sum, summary) => sum + summary.profit,
+        0,
+      );
 
       console.log("Fund Summaries:", this.fundSummaries);
 

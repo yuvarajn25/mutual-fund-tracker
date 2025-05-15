@@ -67,6 +67,8 @@ export interface FundSummaryWithNav {
   fund_code: string;
   // Add other properties from the fund_summary table if selected by '*'
   net_units: number; // Based on usage in map
+  invested: number;
+  profit: number;
   nav_data: {
     nav_value: number; // Supabase might return this as string depending on schema
     nav_date: string;
