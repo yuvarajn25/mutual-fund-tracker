@@ -10,7 +10,14 @@ import { CommonModule } from "@angular/common";
 import { AuthService } from "../auth/auth.service";
 import { SupabaseClient } from "@supabase/supabase-js";
 import * as Papa from "papaparse";
+import { ParseResult } from "papaparse";
 import { firstValueFrom } from "rxjs";
+import {
+  Transaction,
+  MutualFund,
+  FailedTransaction,
+  CsvTransactionData,
+} from "../shared/types";
 
 @Component({
   selector: "app-transactions",
@@ -20,22 +27,23 @@ import { firstValueFrom } from "rxjs";
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
 export class TransactionsComponent implements OnInit {
-  transactions: any[] = [];
-  funds: any[] = [];
+  @ViewChild("csvFileInput") csvFileInput: ElementRef | undefined;
+
+  transactions: Transaction[] = [];
+  funds: MutualFund[] = [];
   showModal = false;
   transactionForm: FormGroup;
-  failedTransactions: any[] = [];
-  selectedTransaction: any = null;
-  @ViewChild("csvFileInput") csvFileInput: ElementRef | undefined;
-  csvData: any[] = [];
-  statusOptions: string[] = ['HOLD', 'SOLD'];
+  failedTransactions: FailedTransaction[] = [];
+  selectedTransaction: Transaction | null = null;
+  csvData: CsvTransactionData[] = [];
+  statusOptions: string[] = ["HOLD", "SOLD"];
   selectedStatuses: string[] = [];
   selectedTransactionTypes: string[] = [];
 
   private supabase: SupabaseClient;
   constructor(
     private authService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.supabase = authService.getClient();
     this.transactionForm = this.fb.group({
@@ -53,8 +61,8 @@ export class TransactionsComponent implements OnInit {
     this.getTransactions();
   }
 
-  handleFileUpload(event: any) {
-    const file = event.target.files[0];
+  handleFileUpload(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
       this.parseCSV(file);
     }
@@ -64,7 +72,7 @@ export class TransactionsComponent implements OnInit {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
-      complete: (result: any) => {
+      complete: (result: ParseResult<CsvTransactionData>) => {
         this.csvData = result.data;
         console.log("Parsed CSV Data:", this.csvData);
         this.mapFundCodesToIds();
@@ -77,7 +85,7 @@ export class TransactionsComponent implements OnInit {
 
   mapFundCodesToIds(): void {
     this.csvData = this.csvData
-      .map((transaction: any) => {
+      .map((transaction: CsvTransactionData) => {
         const fund = this.funds.find(
           (fund) => fund.fund_code === transaction.fund_code,
         );
@@ -88,7 +96,7 @@ export class TransactionsComponent implements OnInit {
           };
         } else {
           console.warn(
-            `Fund code ${transaction.fund_code} not found. Transaction will be skipped.`
+            `Fund code ${transaction.fund_code} not found. Transaction will be skipped.`,
           );
           this.failedTransactions.push({
             ...transaction,
@@ -97,7 +105,7 @@ export class TransactionsComponent implements OnInit {
           return null;
         }
       })
-      .filter((transaction: any) => transaction !== null);
+      .filter((transaction) => transaction !== null) as CsvTransactionData[];
   }
 
   async uploadTransactions(): Promise<void> {
@@ -114,7 +122,7 @@ export class TransactionsComponent implements OnInit {
             {
               fund_id: transaction.fund_id,
               transaction_date: transaction.transaction_date,
-              transaction_type: transaction.transaction_type,
+              transaction_type: transaction.transaction_type.toUpperCase(),
               units: transaction.units,
               price: transaction.price,
               platform: transaction.platform,
@@ -151,11 +159,11 @@ export class TransactionsComponent implements OnInit {
         `);
 
     if (this.selectedStatuses.length > 0) {
-      query = query.in('status', this.selectedStatuses);
+      query = query.in("status", this.selectedStatuses);
     }
 
     if (this.selectedTransactionTypes.length > 0) {
-      query = query.in('transaction_type', this.selectedTransactionTypes);
+      query = query.in("transaction_type", this.selectedTransactionTypes);
     }
 
     try {
@@ -171,7 +179,7 @@ export class TransactionsComponent implements OnInit {
       if (error) {
         console.error("Error fetching transactions:", error);
       } else {
-        this.transactions = transactions || [];
+        this.transactions = (transactions as unknown as Transaction[]) || [];
       }
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -193,7 +201,7 @@ export class TransactionsComponent implements OnInit {
     }
   }
 
-  openModal(transaction?: any): void {
+  openModal(transaction?: Transaction): void {
     this.selectedTransaction = transaction || null;
     if (transaction) {
       this.transactionForm.patchValue(transaction);

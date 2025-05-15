@@ -7,6 +7,8 @@ import { Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { AuthService } from "../auth/auth.service";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { SearchResult, FundDetails, MutualFund } from "../shared/types";
+
 
 @Component({
   selector: "app-funds",
@@ -17,10 +19,10 @@ import { SupabaseClient } from "@supabase/supabase-js";
 })
 export class FundsComponent implements OnInit {
   searchQuery = "";
-  searchResults: any[] = [];
-  selectedFund: any = null;
-  fundDetails: any = null;
-  funds: any[] = [];
+  searchResults: SearchResult[] = [];
+  selectedFund: string | null = null;
+  fundDetails: FundDetails | null = null;
+  funds: MutualFund[] = [];
 
   isDropdownOpen = false;
   private supabase: SupabaseClient;
@@ -91,7 +93,7 @@ export class FundsComponent implements OnInit {
         console.error("Error fetching funds:", error);
       } else {
         console.log("Funds fetched successfully!", mutual_funds);
-        this.funds = mutual_funds as any[];
+        this.funds = mutual_funds as MutualFund[];
       }
     } catch (error) {
       console.error("Error fetching funds:", error);

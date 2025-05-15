@@ -83,7 +83,7 @@
               Edit
             </button>
             <button
-              (click)="deleteTransaction(transaction.transaction_id)"
+              (click)="deleteTransaction(transaction.transaction_id || '')"
               class="btn btn-sm btn-error"
             >
               Delete

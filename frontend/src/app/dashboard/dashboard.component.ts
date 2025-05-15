@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { AuthService } from "../auth/auth.service";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { MfApiPriceData, FundSummaryWithNav } from "../shared/types";
 
 interface FundSummary {
   fund_id: string;
@@ -46,9 +47,18 @@ async function updateNavData(
     // Fetch latest NAV from API
     const priceUrl = `https://api.mfapi.in/mf/${fund_code}/latest`;
     const priceResponse = await fetch(priceUrl);
-    const priceData = await priceResponse.json();
+    const priceData: MfApiPriceData = await priceResponse.json();
     const latestNav = priceData?.data?.[0]?.nav;
-    const latestNavDate = priceData?.data?.[0]?.date;
+    let latestNavDate = priceData?.data?.[0]?.date;
+
+    if (latestNavDate) {
+      const dateParts = latestNavDate.split("-");
+      if (dateParts.length === 3) {
+        latestNavDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+      } else {
+        console.error(`Unexpected date format: ${latestNavDate}`);
+      }
+    }
 
     if (latestNav) {
       console.log(
@@ -72,7 +82,7 @@ async function updateNavData(
     } else {
       console.warn(`Could not fetch NAV data for ${fund_code} from API.`);
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(`Error updating NAV data for ${fund_code}:`, error);
   }
 }
@@ -98,9 +108,11 @@ export class DashboardComponent implements OnInit {
 
   async getFundSummaries(): Promise<void> {
     try {
-      const { data: fundSummaries, error } = await this.supabase.from(
-        "fund_summary",
-      ).select(`*,
+      const {
+        data: fundSummaries,
+        error,
+      }: { data: FundSummaryWithNav[] | null; error: any } =
+        await this.supabase.from("fund_summary").select(`*,
                     nav_data (
                         nav_value, nav_date
                     )`);
@@ -109,14 +121,16 @@ export class DashboardComponent implements OnInit {
         console.error("Error fetching fund summaries:", error);
         return;
       }
-      console.log("fundSummaries", fundSummaries);
-      this.fundSummaries = fundSummaries.map((summary) => ({
-        ...summary,
-        unitNavValue:
-          summary.net_units *
-          (summary.nav_data ? summary.nav_data[0].nav_value : 0),
-        nav: summary.nav_data ? summary.nav_data[0].nav_value : null,
-      })) as FundSummary[];
+      // Filter out funds with net_units equal to 0
+      this.fundSummaries = (fundSummaries as unknown as FundSummaryWithNav[])
+        .filter((summary) => summary.net_units !== 0)
+        .map((summary) => ({
+          ...summary,
+          unitNavValue:
+            summary.net_units *
+            (summary.nav_data ? summary.nav_data?.[0]?.nav_value : 0),
+          nav: summary.nav_data ? summary.nav_data?.[0]?.nav_value : null,
+        })) as FundSummary[];
 
       console.log("Fund Summaries:", this.fundSummaries);
 
@@ -124,7 +138,7 @@ export class DashboardComponent implements OnInit {
       for (const summary of this.fundSummaries) {
         await updateNavData(this.supabase, summary.fund_id, summary.fund_code);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching fund summaries:", error);
     }
   }
