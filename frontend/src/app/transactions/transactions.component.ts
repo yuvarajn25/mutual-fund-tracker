@@ -18,29 +18,79 @@ import {
   FailedTransaction,
   CsvTransactionData,
 } from "../shared/types";
+import { TagModule } from "primeng/tag";
+import { IconFieldModule } from "primeng/iconfield";
+import { InputIconModule } from "primeng/inputicon";
+import { HttpClientModule } from "@angular/common/http";
+import { InputTextModule } from "primeng/inputtext";
+import { MultiSelectModule } from "primeng/multiselect";
+import { SelectModule } from "primeng/select";
+import { Table, TableFilterEvent, TableModule } from "primeng/table";
+import { Dialog } from "primeng/dialog";
+import { ButtonModule } from "primeng/button";
+import { FilterMatchMode } from "primeng/api";
 
 @Component({
   selector: "app-transactions",
   templateUrl: "./transactions.component.html",
   styleUrls: ["./transactions.component.css"],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    IconFieldModule,
+    InputTextModule,
+    InputIconModule,
+    HttpClientModule,
+    InputTextModule,
+    TagModule,
+    SelectModule,
+    MultiSelectModule,
+    ButtonModule,
+    IconFieldModule,
+    InputIconModule,
+    Dialog,
+  ],
 })
 export class TransactionsComponent implements OnInit {
-  @ViewChild("csvFileInput") csvFileInput: ElementRef | undefined;
+  private supabase: SupabaseClient;
 
   transactions: Transaction[] = [];
   funds: MutualFund[] = [];
-  showModal = false;
-  transactionForm: FormGroup;
   failedTransactions: FailedTransaction[] = [];
+  tempTransactions: Transaction[] = [];
+
   selectedTransaction: Transaction | null = null;
-  csvData: CsvTransactionData[] = [];
-  statusOptions: string[] = ["HOLD", "SOLD"];
   selectedStatuses: string[] = [];
   selectedTransactionTypes: string[] = [];
 
-  private supabase: SupabaseClient;
+  showModal = false;
+  searchValue = "";
+  filters: any | undefined;
+  first = 0;
+  rows = 10;
+  totalRecords: number = 0;
+
+  transactionForm: FormGroup;
+  csvData: CsvTransactionData[] = [];
+  statusOptions: string[] = ["HOLD", "SOLD"];
+
+  statuses = [
+    { label: "HOLD", value: "HOLD" },
+    { label: "SOLD", value: "SOLD" },
+  ];
+
+  platform = [
+    { label: "ICICI", value: "ICICI" },
+    { label: "GROWW", value: "GROWW" },
+    { label: "Coin", value: "Coin" },
+  ];
+
+  @ViewChild("csvFileInput") csvFileInput: ElementRef | undefined;
+
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
@@ -61,6 +111,85 @@ export class TransactionsComponent implements OnInit {
     this.getTransactions();
   }
 
+  // Data Fetching
+  async getFunds(): Promise<void> {
+    try {
+      const { data: funds, error } = await this.supabase
+        .from("mutual_funds")
+        .select("*");
+
+      if (error) {
+        console.error("Error fetching funds:", error);
+      } else {
+        this.funds = funds || [];
+      }
+    } catch (error) {
+      console.error("Error fetching funds:", error);
+    }
+  }
+
+  async getTransactions(): Promise<void> {
+    let query = this.supabase.from("transactions").select(`
+          *,
+          mutual_funds (
+            fund_name
+          )
+        `);
+
+    if (this.selectedStatuses.length > 0) {
+      query = query.in("status", this.selectedStatuses);
+    }
+
+    if (this.selectedTransactionTypes.length > 0) {
+      query = query.in("transaction_type", this.selectedTransactionTypes);
+    }
+
+    try {
+      const { data: transactions, error } = await query.select(`
+          *,
+          mutual_funds (
+            fund_name
+          )
+            fund_name
+          )
+        `);
+
+      if (error) {
+        console.error("Error fetching transactions:", error);
+      } else {
+        this.transactions = (transactions as unknown as Transaction[]) || [];
+        this.tempTransactions = this.transactions.slice(
+          this.first,
+          this.first + this.rows,
+        );
+        this.totalRecords = this.transactions.length;
+      }
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+    }
+  }
+
+  getTransactionsData() {
+    let filteredTrasnsactions = this.transactions;
+    for (let columnKey of Object.keys(this.filters || {})) {
+      const { value, matchMode } =
+        (this.filters?.[columnKey] as Array<any>)?.[0] || {};
+      console.log({ value, matchMode }, columnKey, this.filters?.[columnKey]);
+      if (!value) continue;
+      if (matchMode === FilterMatchMode.IN) {
+        filteredTrasnsactions = filteredTrasnsactions.filter((transaction) =>
+          value.map((v: any) => v.value).includes(transaction.status),
+        );
+      }
+    }
+    this.tempTransactions = filteredTrasnsactions.slice(
+      this.first,
+      this.first + this.rows,
+    );
+    this.totalRecords = filteredTrasnsactions.length;
+  }
+
+  // CSV Processing
   handleFileUpload(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
@@ -150,57 +279,7 @@ export class TransactionsComponent implements OnInit {
     }
   }
 
-  async getTransactions(): Promise<void> {
-    let query = this.supabase.from("transactions").select(`
-          *,
-          mutual_funds (
-            fund_name
-          )
-        `);
-
-    if (this.selectedStatuses.length > 0) {
-      query = query.in("status", this.selectedStatuses);
-    }
-
-    if (this.selectedTransactionTypes.length > 0) {
-      query = query.in("transaction_type", this.selectedTransactionTypes);
-    }
-
-    try {
-      const { data: transactions, error } = await query.select(`
-          *,
-          mutual_funds (
-            fund_name
-          )
-            fund_name
-          )
-        `);
-
-      if (error) {
-        console.error("Error fetching transactions:", error);
-      } else {
-        this.transactions = (transactions as unknown as Transaction[]) || [];
-      }
-    } catch (error) {
-      console.error("Error fetching transactions:", error);
-    }
-  }
-  async getFunds(): Promise<void> {
-    try {
-      const { data: funds, error } = await this.supabase
-        .from("mutual_funds")
-        .select("*");
-
-      if (error) {
-        console.error("Error fetching funds:", error);
-      } else {
-        this.funds = funds || [];
-      }
-    } catch (error) {
-      console.error("Error fetching funds:", error);
-    }
-  }
-
+  // Modal Operations
   openModal(transaction?: Transaction): void {
     this.selectedTransaction = transaction || null;
     if (transaction) {
@@ -217,6 +296,7 @@ export class TransactionsComponent implements OnInit {
   }
 
   async saveTransaction(): Promise<void> {
+    console.log(this.transactionForm);
     if (this.transactionForm.valid) {
       const transaction = this.transactionForm.value;
       try {
@@ -234,6 +314,7 @@ export class TransactionsComponent implements OnInit {
             await this.getTransactions();
           }
         } else {
+          console.log("trasaction", transaction);
           const { data, error } = await this.supabase
             .from("transactions")
             .insert([transaction]);
@@ -252,6 +333,24 @@ export class TransactionsComponent implements OnInit {
     }
   }
 
+  // Table Operations
+  clear(table: Table) {
+    table.clear();
+    this.searchValue = "";
+  }
+
+  pageChange(event: any) {
+    this.first = event.first;
+    this.rows = event.rows;
+    this.getTransactionsData();
+  }
+
+  onFilterChange(event: TableFilterEvent) {
+    this.filters = event.filters;
+    this.getTransactionsData();
+  }
+
+  // Transaction Management
   async deleteTransaction(transactionId: string): Promise<void> {
     try {
       const { data, error } = await this.supabase
